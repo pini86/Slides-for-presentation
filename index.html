@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Presentation</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>A little dive into JavaScript regular expressions.</section>
+        <section>
+          <section>A little history.</section>
+          <section>
+            <img src="./examples/assets/Kleene.jpg" width="350" alt="kleene" />
+            <p>Stephen Kleene</p>
+          </section>
+          <section>
+            <img src="./examples/assets/thompson_lg..jpeg" width="350" alt="thompson" />
+            <p>Kenneth Lane Thompson</p>
+          </section>
+        </section>
+
+        <section>
+          <section>Introduction</section>
+          <section>
+            <img src="./examples/assets/introduction 1.png" alt="example" />
+          </section>
+        </section>
+
+        <section>
+          <section>How to create regular expressions?</section>
+          <section>Regular expression constructor.</section>
+          <section>
+            <pre><code data-noescape>
+						       new RegExp(pattern[, flags])
+							</code></pre>
+          </section>
+          <section>Regular expression literal.</section>
+          <section>
+            <pre><code data-noescape>
+								const regexp = /pattern/[flags];
+			 		</code></pre>
+          </section>
+          <section>What to choose: constructor or literal?</section>
+        </section>
+
+        <section>
+          <section>What methods do the RegExp object have?</section>
+          <section>RegExp.test()</section>
+          <section>
+            <pre><code data-noescape>
+								const str = "I love JavaScript";
+								const regexp = /love/i;
+
+								alert( regexp.test(str) ); // true
+			 		</code></pre>
+          </section>
+          <section>RegExp.exec()</section>
+          <section>
+            <pre><code data-noescape>
+								const str = 'Hello, world!';
+								const regexp = /\w+/g; 
+
+								alert( regexp.exec(str) ); // Hello
+								alert( regexp.exec(str) ); // world
+			 		</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            The String object and its methods for regular expressions.
+          </section>
+          <section>String.search()</section>
+          <section>
+            <pre><code data-noescape>
+								const str = "I love JavaScript!";
+								const regexp = /Script.+/;
+
+								alert( str.search(regexp) ); // 11
+			 		</code></pre>
+          </section>
+          <section>String.match()</section>
+          <section>
+            <pre><code data-noescape>
+					const str = "I really love hamburgers";
+					const result = str.match(/ham(burgers)/); // without 'g'
+
+					alert( result[0] );     // hamburgers
+					alert( result[1] );     // burgers
+					alert( result.length ); // 2
+					alert( result.index );  // 14 
+					alert( result.input );  // I really love Hamburgers
+			 		</code></pre>
+          </section>
+          <section>
+            <pre><code data-noescape>
+						const str = "I really love hamburgers";
+						const result = str.match(/ham(burgers)/g); // with 'g'
+
+						alert( result[0] );     // hamburgers
+						alert( result.length ); // 1
+						 </code></pre>
+          </section>
+          <section>
+            <pre><code data-noescape>
+								const str = "I really love hamburgers";
+                const regexp = /Apple/;
+								const result = str.match(reg);
+
+								alert( result );     	// null
+								alert( result.length ); // error
+							 </code></pre>
+          </section>
+          <section>String.matchAll()</section>
+          <section>
+            <pre><code data-noescape>
+				const str = 'The world of words is not full of word.';
+				const regexp = /word/g; // with 'g'
+				const matches = str.matchAll(regexp);
+
+				for (const match of matches) {
+					alert(match); // word, word
+				}
+					 </code></pre>
+          </section>
+          <section>
+            <pre><code data-noescape>
+				const str = 'The world of words is not full of word.';
+				const regexp = /word/g; // with 'g'
+				const matches = Array.from(str.matchAll(regexp));
+						
+				alert(matches); // [word, word]
+							</code></pre>
+          </section>
+          <section>
+            <pre><code data-noescape>
+				const str = 'The world of words is not full of word.';
+				const regexp = /word/g; // with 'g'
+				const matches = [...str.matchAll(regexp)];
+										
+				alert(matches); // [word, word]
+					</code></pre>
+          </section>
+          <section>String.split()</section>
+          <section>
+            <pre><code data-noescape>
+              const str = '2-12-85-06';
+              const regexp = /-/g;
+              
+              alert(str.split(regexp)); // [2, 12, 85, 06]
+						 </code></pre>
+          </section>
+          <section>String.replace()</section>
+          <section>
+            <pre><code data-noescape>
+              const str = '2-12-85-06';
+              const regexp = /-/g;
+
+              alert(str.replace(regexp, ":")); // 2:12:85:06
+						 </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>Simple patterns are simple.</section>
+					<section>
+            <pre><code data-noescape>
+							const str = "I really love my dog.";
+							const regexp = /love/;
+							
+							alert(regexp.test(str));	// true
+						</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>«And Now for Something Completely Different»</section>
+          <section>Character classes.</section>
+          
+          <section><pre><code class="language-text hljs language-plaintext">
+        .  - any character except for newline
+        \d - single digit
+        \w - single character in Latin alphabet and underscore
+        \s - single white space character (space, tab, etc.)
+        \D - not single digit
+        \W - not single character in Latin alphabet
+        \S - single non-white space character</code></pre></section>
+        <section>
+            <pre><code data-noescape>
+                const str = 'I love you 2.';
+                const regexp = /\d/;
+
+                alert(str.match(regexp)); // 2
+						</code></pre>
+          </section>
+          <section>Assertions.</section>
+          <section><pre><code class="language-text hljs language-plaintext">
+  ^ - the beginning of the string
+  $ - the end of the string
+  \b - word boundary (at the beginning or ending of a word)
+  \B - non-word boundary
+  x(?=y) - lookahead (if "x" is followed by "y")
+  x(?!y) - negative lookahead (if "x" is not followed by "y")
+  (?&lt;=y)x - lookbehind (if "x" is preceded by "y")
+  (?&lt;!y)x - negative lookbehind (if "x" is not preceded by "y")
+    </code></pre></section>
+            <section>
+              <pre><code data-noescape>
+              const str = "Bob really likes hamburgers.";
+              const regexp = /^Bob/;
+                
+              alert(regexp.test(str));	// true
+              </code></pre>
+            </section>
+          <section>Quantifiers.</section>
+          <section><pre><code class="language-text hljs language-plaintext">
+* - Matches the preceding expression 0 or more times.
++ - Matches the preceding expression 1 or more times.
+? - Preceding expression is optional (i.e. matches 0 or 1 times).
+x{n} - The "n" must be a positive integer. 
+       It matches exactly "n".
+x{n, } - The "n" must be a positive integer. 
+         It matches at least "n".
+x{n, m} - The "n" can be 0 or a positive integer. 
+          The "m" is a positive integer. 
+          If "m" > "n", it matches at least "n" and at most "m".</code></pre></section>
+          <section>
+            <pre><code data-noescape>
+              const str1 = "Bob";
+              const str2 = "21";
+              const regexp = /\d+/;
+                              
+              alert(regexp.test(str1)); // false
+              alert(regexp.test(str2)); // true
+            </code></pre>
+          </section>
+          <section>Groups and ranges.</section>
+          <section><pre><code class="language-text hljs language-plaintext">
+[abc] - any single character inside the brackets.
+[^abc] — anything that is not inside the brackets.
+[a-z] - any characters in the rage from "a" to "z".
+[^a-z] - any characters that are not in the rage from "a" to "z".
+(x) - x and remembers it so we can use it later.
+(?&lt;name&gt;x) - Creates a capturing group 
+             that can be referenced via the specified name.
+(?:x) - "x" but does not remember the match so the match 
+        can't be extracted from the resulting array of elements</code></pre></section>
+        <section>
+          <pre><code data-noescape>
+            const str1 = "Baby";
+            const str2 = "I go to you.";
+            const regexp = /[aei]/;
+                            
+            alert(regexp.test(str1)); // true
+            alert(regexp.test(str2)); // false
+          </code></pre>
+        </section>
+        <section>
+          <pre><code data-noescape>
+            const str1 = "2128506";
+            const str2 = "A cute elephant eats grass.";
+            const regexp = /[^0-9]/;
+                            
+            alert(regexp.test(str1)); // false
+            alert(regexp.test(str2)); // true
+          </code></pre>
+        </section>
+          <section>Alternations.</section>
+          <section><pre><code class="language-text hljs language-plaintext">
+          | - Matches the expression before or after the |. 
+              Acts like a boolean OR (||).
+            </code></pre></section>
+            <section>
+              <pre><code data-noescape>
+                const str1 = "I love my white bird.";
+                const str2 = "You love your red bird.";
+                const regexp = /(black|white) bird/;
+                                
+                alert(regexp.test(str1)); // true
+                alert(regexp.test(str2)); // false
+              </code></pre>
+            </section>
+          <section>Flags.</section>
+          <section><pre><code class="language-text hljs language-plaintext">
+      g – Search globally, i.e. don't stop after the first match.
+      i – Ignore case, i.e. match both upper and lower case.
+      s - When you use it with ., . can match newline characters.
+      m – Multi-line input, starts with "^", ends with "$", 
+          i.e. match the beginning or end of each line.            
+              </code></pre></section>
+              <section>
+                <pre><code data-noescape>
+ const str = "One elephant eats grass and baby elephant sleeps.";
+ const regexp1 = /one/i;
+ const regexp2 = /elephant/g;
+                
+ alert(regexp1.test(str)); // true
+ alert(str.match(regexp2)); // elephant,elephant
+                </code></pre>
+              </section>
+        </section>
+
+        <section>Conclusion.</section>
+        <section>All the best and good luck.</section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
